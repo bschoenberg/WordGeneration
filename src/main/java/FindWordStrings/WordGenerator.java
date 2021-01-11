@@ -3,6 +3,8 @@ package FindWordStrings;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WordGenerator {
 
@@ -10,7 +12,7 @@ public class WordGenerator {
         _dictionary = dictionary;
     }
 
-    public List<String> generateWords(String inputWord) {
+    public HashSet<String> generateWords(String inputWord) {
 
         if (inputWord.length() == 0) {
             throw new IllegalArgumentException("Word must contain at least one character");
@@ -21,13 +23,13 @@ public class WordGenerator {
             inputWord = inputWord.split(" ")[0];
         }
 
-        else if (inputWord.matches("\\d+\\W+")) {
+        else if (matchRegex(inputWord)) {
             throw new IllegalArgumentException("Word may not contain digits or special characters");
         }
 
 
         HashSet<String> permutations = computePermutations(inputWord);
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> generatedWords = new HashSet<>();
 
         for (String s : permutations) {
             if (_dictionary.isEnglishWord(s))
@@ -69,6 +71,15 @@ public class WordGenerator {
         }
 
         return permutations;
+    }
+
+    private Boolean matchRegex (String inputStr) {
+        Pattern pattern = Pattern.compile("[\\d\\W]");
+        Matcher matcher = pattern.matcher(inputStr);
+        while (matcher.find()) {
+            return true;
+        }
+        return false;
     }
 
     private IDictionary _dictionary;

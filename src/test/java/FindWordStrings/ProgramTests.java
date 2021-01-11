@@ -1,13 +1,12 @@
 package FindWordStrings;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class ProgramTests {
@@ -18,7 +17,7 @@ public class ProgramTests {
 
         String inputWord = "";
         WordGenerator generator = new WordGenerator(dictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -27,7 +26,7 @@ public class ProgramTests {
 
         String inputWord = "All4One";
         WordGenerator generator = new WordGenerator(dictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -36,197 +35,236 @@ public class ProgramTests {
 
         String inputWord = "boyz%";
         WordGenerator generator = new WordGenerator(dictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
     }
 
     @Test
     public void generateWords_singleLetterWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("a")).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> mock = new HashSet<>();
+        mock.add("a");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
+
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "a";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(1, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_twoLetterWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("a")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("at")).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> mock = new HashSet<>();
+        mock.add("a");
+        mock.add("at");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
+
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "at";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(2, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_threeLetterWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("a")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("at")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ta")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("cat")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("act")).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> mock = new HashSet<>();
+        mock.add("a");
+        mock.add("at");
+        mock.add("ta");
+        mock.add("cat");
+        mock.add("act");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
+
+
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "cat";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(5, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_twoWordInput_onlyFirstWordProcessed() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("a")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("at")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("fa")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("aft")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("fat")).thenReturn(true);
+
+        HashSet<String> mock = new HashSet<>();
+        mock.add("a");
+        mock.add("at");
+        mock.add("fa");
+        mock.add("aft");
+        mock.add("fat");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
 
         String inputWord = "fat cat";
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> generatedWords = new HashSet<>();
 
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(5, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_otherThreeLetterWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("po")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("or")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("pro")).thenReturn(true);
+        HashSet<String> mock = new HashSet<>();
+        mock.add("po");
+        mock.add("or");
+        mock.add("pro");
+        for (String string : mock) {
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
+        }
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "pro";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(3, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_wordWithDupLetters_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("a")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ad")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("da")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("add")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("dad")).thenReturn(true);
+        HashSet<String> mock = new HashSet<>();
+        mock.add("a");
+        mock.add("ad");
+        mock.add("da");
+        mock.add("dad");
+        mock.add("add");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "add";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(5, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_fourLetterWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("cud")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("crud")).thenReturn(true);
+        HashSet<String> mock = new HashSet<>();
+        mock.add("cud");
+        mock.add("crud");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "crud";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(2, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 
     @Test
     public void generateWords_longWord_returnsCorrectResult() {
         IDictionary mockDictionary = mock(IDictionary.class);
-        when(mockDictionary.isEnglishWord("i")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("or")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("in")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ow")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ok")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("on")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("go")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("gi")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ki")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wo")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wok")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("kor")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("kin")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("gin")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wog")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wig")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("row")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("now")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("won")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("win")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("gor")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("org")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("gow")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("koi")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("nog")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("nor")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("ring")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("rink")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("king")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wing")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("grin")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wink")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wonk")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("grow")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("worn")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("know")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("work")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("wrong")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("grown")).thenReturn(true);
-        when(mockDictionary.isEnglishWord("working")).thenReturn(true);
+        HashSet<String> mock = new HashSet<>();
+        mock.add("i");
+        mock.add("or");
+        mock.add("in");
+        mock.add("ow");
+        mock.add("on");
+        mock.add("go");
+        mock.add("gi");
+        mock.add("ki");
+        mock.add("wo");
+        mock.add("wok");
+        mock.add("kor");
+        mock.add("kin");
+        mock.add("gin");
+        mock.add("wog");
+        mock.add("wig");
+        mock.add("row");
+        mock.add("now");
+        mock.add("won");
+        mock.add("win");
+        mock.add("gor");
+        mock.add("org");
+        mock.add("gow");
+        mock.add("koi");
+        mock.add("nog");
+        mock.add("nor");
+        mock.add("ring");
+        mock.add("rink");
+        mock.add("king");
+        mock.add("wing");
+        mock.add("grin");
+        mock.add("wink");
+        mock.add("wonk");
+        mock.add("grow");
+        mock.add("worn");
+        mock.add("know");
+        mock.add("work");
+        mock.add("wrong");
+        mock.add("grown");
+        mock.add("rowing");
+        mock.add("working");
+        for (String string : mock)
+            when(mockDictionary.isEnglishWord(string)).thenReturn(true);
 
-        List<String> generatedWords = new ArrayList<>();
+
+        HashSet<String> generatedWords = new HashSet<>();
 
         String inputWord = "working";
         WordGenerator generator = new WordGenerator(mockDictionary);
-        List<String> results = generator.generateWords(inputWord);
+        HashSet<String> results = generator.generateWords(inputWord);
         for (String s : results) {
             generatedWords.add(s);
         }
 
         Assert.assertEquals(40, generatedWords.size());
+        Assert.assertEquals(mock, results);
     }
 }
